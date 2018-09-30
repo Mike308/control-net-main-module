@@ -1,46 +1,46 @@
 #include "command.h"
 
-command::command()
+Command::Command()
 {
 
 }
 
-int command::getId() const
+int Command::getId() const
 {
     return id;
 }
 
-void command::setId(int value)
+void Command::setId(int value)
 {
     id = value;
 }
 
-int command::getModuleId() const
+int Command::getModuleId() const
 {
     return moduleId;
 }
 
-void command::setModuleId(int value)
+void Command::setModuleId(int value)
 {
     moduleId = value;
 }
 
-QString command::getCommand() const
+QString Command::getCommand() const
 {
-    return command;
+    return Command;
 }
 
-void command::setCommand(const QString &value)
+void Command::setCommand(const QString &value)
 {
-    command = value;
+    Command = value;
 }
 
-int command::getInterval() const
+int Command::getInterval() const
 {
     return interval;
 }
 
-void command::setInterval(int value)
+void Command::setInterval(int value)
 {
     interval = value;
 }

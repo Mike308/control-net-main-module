@@ -1,46 +1,46 @@
 #include "temperature.h"
 
-temperature::temperature()
+Temperature::Temperature()
 {
 
 }
 
-int temperature::getId() const
+int Temperature::getId() const
 {
     return id;
 }
 
-void temperature::setId(int value)
+void Temperature::setId(int value)
 {
     id = value;
 }
 
-int temperature::getSensorId() const
+int Temperature::getSensorId() const
 {
     return sensorId;
 }
 
-void temperature::setSensorId(int value)
+void Temperature::setSensorId(int value)
 {
     sensorId = value;
 }
 
-float temperature::getTemperature() const
+float Temperature::getTemperature() const
 {
-    return temperature;
+    return Temperature;
 }
 
-void temperature::setTemperature(float value)
+void Temperature::setTemperature(float value)
 {
-    temperature = value;
+    Temperature = value;
 }
 
-QString temperature::getData() const
+QString Temperature::getData() const
 {
     return data;
 }
 
-void temperature::setData(const QString &value)
+void Temperature::setData(const QString &value)
 {
     data = value;
 }

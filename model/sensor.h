@@ -2,10 +2,10 @@
 #define SENSOR_H
 
 
-class sensor
+class Sensor
 {
 public:
-    sensor();
+    Sensor();
 
     int getId() const;
     void setId(int value);

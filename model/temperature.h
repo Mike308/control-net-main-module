@@ -2,10 +2,10 @@
 #define TEMPERATURE_H
 
 
-class temperature
+class Temperature
 {
 public:
-    temperature();
+    Temperature();
 
     int getId() const;
     void setId(int value);
@@ -22,7 +22,7 @@ public:
 private:
     int id;
     int sensorId;
-    float temperature;
+    float Temperature;
     QString data;
 };
 

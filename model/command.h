@@ -2,10 +2,10 @@
 #define COMMAND_H
 
 
-class command
+class Command
 {
 public:
-    command();
+    Command();
 
     int getId() const;
     void setId(int value);

@@ -4,6 +4,7 @@
 
 class Command : public QObject
 {
+    Q_OBJECT
 public:
     Command();
     int getId() const;

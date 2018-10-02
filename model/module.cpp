@@ -34,3 +34,13 @@ void Module::setType(const QString &value)
 {
     type = value;
 }
+
+QString Module::getAddress() const
+{
+    return address;
+}
+
+void Module::setAddress(const QString &value)
+{
+    address = value;
+}

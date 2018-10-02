@@ -17,10 +17,14 @@ public:
     QString getType() const;
     void setType(const QString &value);
 
+    QString getAddress() const;
+    void setAddress(const QString &value);
+
 private:
     int id;
     QString name;
     QString type;
+    QString address;
 
 };
 

@@ -4,6 +4,7 @@
 
 class Sensor : public QObject
 {
+    Q_OBJECT
 public:
     Sensor();
 

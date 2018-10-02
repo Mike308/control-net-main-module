@@ -35,12 +35,12 @@ void Temperature::setTemperature(float value)
     temperature = value;
 }
 
-QString Temperature::getData() const
+QString Temperature::getDate() const
 {
-    return data;
+    return date;
 }
 
-void Temperature::setData(const QString &value)
+void Temperature::setDate(const QString &value)
 {
-    data = value;
+    date = value;
 }

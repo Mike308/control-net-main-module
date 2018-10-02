@@ -4,6 +4,7 @@
 
 class Temperature : public QObject
 {
+    Q_OBJECT
 public:
     Temperature();
 
@@ -16,14 +17,14 @@ public:
     float getTemperature() const;
     void setTemperature(float value);
 
-    QString getData() const;
-    void setData(const QString &value);
+    QString getDate() const;
+    void setDate(const QString &value);
 
 private:
     int id;
     int sensorId;
     float temperature;
-    QString data;
+    QString date;
 };
 
 #endif // TEMPERATURE_H

@@ -27,12 +27,12 @@ void Temperature::setSensorId(int value)
 
 float Temperature::getTemperature() const
 {
-    return Temperature;
+    return temperature;
 }
 
 void Temperature::setTemperature(float value)
 {
-    Temperature = value;
+    temperature = value;
 }
 
 QString Temperature::getData() const

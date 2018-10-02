@@ -1,8 +1,8 @@
 #ifndef SENSOR_H
 #define SENSOR_H
+#include <QObject>
 
-
-class Sensor
+class Sensor : public QObject
 {
 public:
     Sensor();

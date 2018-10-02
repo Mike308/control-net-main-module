@@ -1,8 +1,8 @@
 #ifndef TEMPERATURE_H
 #define TEMPERATURE_H
+#include <QObject>
 
-
-class Temperature
+class Temperature : public QObject
 {
 public:
     Temperature();
@@ -22,7 +22,7 @@ public:
 private:
     int id;
     int sensorId;
-    float Temperature;
+    float temperature;
     QString data;
 };
 

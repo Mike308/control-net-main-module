@@ -1,12 +1,11 @@
 #ifndef COMMAND_H
 #define COMMAND_H
+#include <QObject>
 
-
-class Command
+class Command : public QObject
 {
 public:
     Command();
-
     int getId() const;
     void setId(int value);
 

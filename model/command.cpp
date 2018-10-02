@@ -27,12 +27,12 @@ void Command::setModuleId(int value)
 
 QString Command::getCommand() const
 {
-    return Command;
+    return command;
 }
 
 void Command::setCommand(const QString &value)
 {
-    Command = value;
+    command = value;
 }
 
 int Command::getInterval() const

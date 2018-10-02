@@ -1,9 +1,10 @@
 #ifndef HUMIDITY_H
 #define HUMIDITY_H
+#include <QObject>
 
-
-class Humidity
+class Humidity : public QObject
 {
+    Q_OBJECT
 public:
     Humidity();
     int getId() const;

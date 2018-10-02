@@ -20,6 +20,15 @@
 #include "model/command.h"
 
 
+//class Temperature;
+//class Sensor;
+//class Humidity;
+//class Command;
+//class AirPressure;
+//class Module;
+class Module;
+class Command;
+
 
 class ControlNetDb : public QObject
 {
@@ -32,9 +41,10 @@ public:
     void insertSensor(Sensor sensor);
     void insertHumidity(Humidity humidity);
     void insertCommand(Command command);
+    void insertAirPressure(AirPressure airPressure);
 
-    QList<Module> getModules();
-    QList<Command> getCommands();
+    QList<Module*> getModules();
+    QList<Command*> getCommands();
 
 
 

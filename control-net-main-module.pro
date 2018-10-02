@@ -1,5 +1,6 @@
 QT += core
 QT -= gui
+QT += sql
 
 CONFIG += c++11
 
@@ -15,7 +16,8 @@ SOURCES += main.cpp \
     model/sensor.cpp \
     model/module.cpp \
     model/humidity.cpp \
-    model/airpressure.cpp
+    model/airpressure.cpp \
+    dao/controlnetdb.cpp
 
 HEADERS += \
     model/command.h \
@@ -23,4 +25,6 @@ HEADERS += \
     model/sensor.h \
     model/module.h \
     model/humidity.h \
-    model/airpressure.h
+    model/airpressure.h \
+    dao/controlnetdb.h \
+    dao/config.h

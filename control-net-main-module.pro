@@ -28,3 +28,7 @@ HEADERS += \
     model/airpressure.h \
     dao/controlnetdb.h \
     dao/config.h
+
+
+target.path = /home/pi/
+INSTALLS += target

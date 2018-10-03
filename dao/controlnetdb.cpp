@@ -6,12 +6,16 @@ ControlNetDb::ControlNetDb()
 }
 
 void ControlNetDb::createDataBase(){
-    QSqlDatabase controlNetDb = QSqlDatabase::addDatabase("ODBC");
+    QSqlDatabase controlNetDb = QSqlDatabase::addDatabase("QODBC");
     QString connectionString = "Driver={libmyodbc.so}; DATABASE=";
-    connectionString.append(DB_NAME);
+    connectionString.append(DB_NAME).append(";");
+    qDebug () << "Connection string: " << connectionString;
     controlNetDb.setDatabaseName(connectionString);
     controlNetDb.setUserName(DB_USER);
     controlNetDb.setPassword(DB_PASSWORD);
+    bool result = controlNetDb.open();
+    qDebug() << "Conection result: " << result;
+
 }
 
 void ControlNetDb::insertCommand(Command command){
@@ -59,9 +63,9 @@ void ControlNetDb::insertAirPressure(AirPressure airPressure){
    insertAirPressureQuery.exec();
 }
 
-QList<Module*> ControlNetDb::getModules(){
+QList<Module> ControlNetDb::getModules(){
     QSqlQuery getModulesQuery;
-    QList<Module*> modules;
+    QList<Module> modules;
     getModulesQuery.exec("select * from modules");
     while (getModulesQuery.next()){
         Module module;
@@ -69,14 +73,14 @@ QList<Module*> ControlNetDb::getModules(){
         module.setName(getModulesQuery.value("name").toString());
         module.setType(getModulesQuery.value("type").toString());
         module.setId(getModulesQuery.value("id").toInt());
-        modules.append(&module);
+        modules.append(module);
     }
     return modules;
 }
 
-QList<Command*> ControlNetDb::getCommands(){
+QList<Command> ControlNetDb::getCommands(){
     QSqlQuery getCommandsQuery;
-    QList<Command*> commands;
+    QList<Command> commands;
     getCommandsQuery.exec("select * from scheduled_commands");
     while (getCommandsQuery.next()) {
         Command command;

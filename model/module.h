@@ -1,10 +1,10 @@
 #ifndef MODULE_H
 #define MODULE_H
-#include <QObject>
+#include <QString>
 
-class Module : public QObject
+class Module
 {
-    Q_OBJECT
+
 public:
     Module();
 

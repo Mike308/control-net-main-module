@@ -1,12 +1,13 @@
 #ifndef HUMIDITY_H
 #define HUMIDITY_H
-#include <QObject>
+#include <QString>
 
-class Humidity : public QObject
+class Humidity
 {
-    Q_OBJECT
+
 public:
     Humidity();
+
     int getId() const;
     void setId(int value);
 

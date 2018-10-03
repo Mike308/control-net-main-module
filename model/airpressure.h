@@ -1,10 +1,10 @@
 #ifndef AIRPRESSURE_H
 #define AIRPRESSURE_H
 #include <QObject>
-
-class AirPressure : public QObject
+#include <QString>
+class AirPressure
 {
-    Q_OBJECT
+
 public:
     AirPressure();
     int getId() const;

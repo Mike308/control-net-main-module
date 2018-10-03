@@ -1,10 +1,10 @@
 #ifndef SENSOR_H
 #define SENSOR_H
-#include <QObject>
+#include <QString>
 
-class Sensor : public QObject
+class Sensor
 {
-    Q_OBJECT
+
 public:
     Sensor();
 

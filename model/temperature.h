@@ -1,10 +1,10 @@
 #ifndef TEMPERATURE_H
 #define TEMPERATURE_H
-#include <QObject>
+#include <QString>
 
-class Temperature : public QObject
+class Temperature
 {
-    Q_OBJECT
+
 public:
     Temperature();
 

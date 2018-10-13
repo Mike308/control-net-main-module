@@ -88,7 +88,7 @@ QList<Command> ControlNetDb::getCommands(){
         command.setModuleId(getCommandsQuery.value("module_id").toInt());
         command.setCommand(getCommandsQuery.value("command").toString());
         command.setInterval(getCommandsQuery.value("command_interval").toInt());
-        commands.append(&command);
+        commands.append(command);
     }
     return commands;
 }

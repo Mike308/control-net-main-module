@@ -1,7 +1,7 @@
 #ifndef TEMPERATURE_H
 #define TEMPERATURE_H
 #include <QString>
-
+#include <QMetaType>
 class Temperature
 {
 
@@ -26,5 +26,5 @@ private:
     float temperature;
     QString date;
 };
-
+Q_DECLARE_METATYPE(Temperature)
 #endif // TEMPERATURE_H

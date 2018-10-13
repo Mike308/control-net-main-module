@@ -2,7 +2,7 @@
 #define NODEBUS_H
 
 #include <QObject>
-
+#include <QList>
 
 #include "nrfnetwork/qnrf24l01network.h"
 
@@ -13,15 +13,14 @@ class NodeBus : public QObject
 {
     Q_OBJECT
 public:
-    explicit NodeBus(QObject *parent = 0);
+    NodeBus();
     void sendRequest(QString request, QString nodeId);
     void updateNodes(QString nodeId);
 
 private:
     QNRF24L01Network *network;
-    QTimer *timer;
     void parseDataFromTemperatureModule(QString data);
-
+//    QList<Temperature> temperatures;
 
 signals:
     void temperaturesReceived(QList<Temperature> temperatures);

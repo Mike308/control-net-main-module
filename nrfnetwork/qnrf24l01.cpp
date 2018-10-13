@@ -10,6 +10,8 @@ QNRF24L01::QNRF24L01(uint16_t cePin, uint16_t csPin, uint32_t spiSpeed){
     radio = new RF24(cePin, csPin, spiSpeed);
     timer = new QTimer();
     connect(timer, SIGNAL(timeout()),this, SLOT(listenSlot()));
+    frames = new QStringList();
+
 }
 
 void QNRF24L01::connectToRadio(){
@@ -35,7 +37,7 @@ void QNRF24L01::sendData(QString data){
     radio->powerDown();
     radio->powerUp();
     bool result = radio->write(buf, 32);
-    qDebug () << "Write status: " << result;
+    qDebug () << "Write: " << data << "|status: " << result;
     radio->startListening();
     this->isWritingData = false;
     timer->start(1000);
@@ -55,7 +57,6 @@ void QNRF24L01::listenSlot(){
         len = radio->getDynamicPayloadSize();
         if (!this->isWritingData){
             radio->read(&msg, len);
-
             QString stringMsg = QString(msg);
             qDebug () << frameCnt << "|" << "Received frame: " << stringMsg << "pipe num: " << pipeNum;
             if (stringMsg.contains('$') == false){

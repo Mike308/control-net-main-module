@@ -1,7 +1,7 @@
 #ifndef SENSOR_H
 #define SENSOR_H
 #include <QString>
-
+#include <QMetaType>
 class Sensor
 {
 
@@ -26,5 +26,5 @@ private:
     QString sensorType;
     QString sensorCode;
 };
-
+Q_DECLARE_METATYPE(Sensor)
 #endif // SENSOR_H

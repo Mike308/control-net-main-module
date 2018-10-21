@@ -5,6 +5,7 @@
 #include "dao/controlnetdb.h"
 #include "model/module.h"
 #include "model/temperature.h"
+#include "model/sensor.h"
 #include "supervisor.h"
 
 
@@ -21,6 +22,8 @@ int main(int argc, char *argv[])
 //        qDebug () << module.getName();
 //    }
     qRegisterMetaType<Temperature>();
+    qRegisterMetaType<Sensor>();
+    qRegisterMetaType<QList<Sensor>>();
     qRegisterMetaType<QList<Temperature>>();
     Supervisor s;
     s.begin();

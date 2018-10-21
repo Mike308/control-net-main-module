@@ -6,7 +6,9 @@
 #include <QDebug>
 
 #include "model/temperature.h"
+#include "model/sensor.h"
 #include "node/nodebus.h"
+
 
 class Supervisor : public QObject
 {
@@ -25,6 +27,7 @@ signals:
 
 public slots:
     void onGetTemperatures(QList<Temperature> temperatures);
+    void onGetSensors(QList<Sensor>, QString nodeId);
     void onSendRequest();
 
 

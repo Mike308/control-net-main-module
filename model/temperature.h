@@ -20,10 +20,14 @@ public:
     QString getDate() const;
     void setDate(const QString &value);
 
+    QString getSensorCode() const;
+    void setSensorCode(const QString &value);
+
 private:
     int id;
     int sensorId;
     float temperature;
+    QString sensorCode;
     QString date;
 };
 Q_DECLARE_METATYPE(Temperature)

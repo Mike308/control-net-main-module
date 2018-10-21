@@ -28,11 +28,10 @@ void NodeBus::parseDataFromTemperatureModule(QString data){
         float temperature = sensor.split("#").value(0).toFloat();
         QString sensorAdress = sensor.split("#").value(1);
         Temperature temperatureObj;
-        temperatureObj.setSensorId(0);
+        temperatureObj.setSensorCode(sensorAdress);
         temperatureObj.setTemperature(temperature);
         temperatures.append(temperatureObj);
     }
-    qDebug () << "Lenght: " << temperatures.length() << "Sensor cnt: " << sensorCnt;
     if (temperatures.length() > sensorCnt.toInt()){
         emit temperaturesReceived(temperatures);
         temperatures.clear();
@@ -41,11 +40,30 @@ void NodeBus::parseDataFromTemperatureModule(QString data){
     }
 }
 
+void NodeBus::parseSensorsFromModule(QString data, QString node){
+    QString sensorCnt = data.split("^").value(0);
+    QStringList items = QString(data.split("^").value(1)).split(";");
+    static QList<Sensor> sensors = QList<Sensor>();
+    for (QString item : items){
+        Sensor sensorObj;
+        sensorObj.setSensorCode(item);
+        sensorObj.setSensorType("temp_sensor");
+        sensors.append(sensorObj);
+    }
+    if (sensors.length() > sensorCnt.toInt()){
+        emit sensorsReceived(sensors, node);
+    }else{
+        network->sendDataToNode(node, "AT+SENS,1?");
+    }
+}
+
 
 void NodeBus::onDataReceived(QString data, QString node){
     QString responseId = data.split("=").at(0);
     if (!responseId.compare("+T")){
         parseDataFromTemperatureModule(data.replace("+T=", ""));
+    }else if (!responseId.compare("+S")){
+        parseSensorsFromModule(data.replace("+S=", ""), node);
     }
 
 }

@@ -44,3 +44,13 @@ void Temperature::setDate(const QString &value)
 {
     date = value;
 }
+
+QString Temperature::getSensorCode() const
+{
+    return sensorCode;
+}
+
+void Temperature::setSensorCode(const QString &value)
+{
+    sensorCode = value;
+}

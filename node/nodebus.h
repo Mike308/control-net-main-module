@@ -7,6 +7,9 @@
 #include "nrfnetwork/qnrf24l01network.h"
 
 #include "model/temperature.h"
+#include "model/sensor.h"
+
+#include "dao/controlnetdb.h"
 
 
 class NodeBus : public QObject
@@ -20,10 +23,11 @@ public:
 private:
     QNRF24L01Network *network;
     void parseDataFromTemperatureModule(QString data);
-//    QList<Temperature> temperatures;
+    void parseSensorsFromModule(QString data, QString node);
 
 signals:
     void temperaturesReceived(QList<Temperature> temperatures);
+    void sensorsReceived(QList<Sensor> sensors, QString nodeId);
 
 
 

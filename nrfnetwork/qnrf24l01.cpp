@@ -1,4 +1,5 @@
 #include "qnrf24l01.h"
+#include <QDateTime>
 
 QNRF24L01::QNRF24L01(QObject *parent) : QObject(parent)
 {
@@ -37,7 +38,7 @@ void QNRF24L01::sendData(QString data){
     radio->powerDown();
     radio->powerUp();
     bool result = radio->write(buf, 32);
-    qDebug () << "Write: " << data << "|status: " << result;
+    qDebug () << "Write: " << data << "|status: " << result << "|" << QDateTime::currentDateTime();
     radio->startListening();
     this->isWritingData = false;
     timer->start(1000);
@@ -52,13 +53,11 @@ void QNRF24L01::listenSlot(){
     uint8_t pipeNum = 0;
     int len = 0;
     static int frameCnt = 0;
-    qDebug() << "Start listening";
     while(radio->available(&pipeNum)){
         len = radio->getDynamicPayloadSize();
         if (!this->isWritingData){
             radio->read(&msg, len);
             QString stringMsg = QString(msg);
-            qDebug () << frameCnt << "|" << "Received frame: " << stringMsg << "pipe num: " << pipeNum;
             if (stringMsg.contains('$') == false){
                 frames->append(stringMsg);
             }else{

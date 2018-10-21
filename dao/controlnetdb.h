@@ -13,6 +13,7 @@
 
 #include "config.h"
 
+
 #include "model/sensor.h"
 #include "model/temperature.h"
 #include "model/airpressure.h"
@@ -34,6 +35,8 @@ public:
     void insertHumidity(Humidity humidity);
     void insertCommand(Command command);
     void insertAirPressure(AirPressure airPressure);
+    int getModuleId(QString moduleAddress);
+    int getSensorId(QString sensorAddress);
 
     QList<Module> getModules();
     QList<Command> getCommands();

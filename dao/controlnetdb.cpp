@@ -63,6 +63,31 @@ void ControlNetDb::insertAirPressure(AirPressure airPressure){
    insertAirPressureQuery.exec();
 }
 
+int ControlNetDb::getModuleId(QString moduleAddress){
+    QSqlQuery getModuleIdQuery;
+    getModuleIdQuery.prepare("select id from modules where address = :address");
+    getModuleIdQuery.bindValue(":address", moduleAddress);
+    getModuleIdQuery.executedQuery();
+    int id = 0;
+    while (getModuleIdQuery.next()){
+        id = getModuleIdQuery.value("id").toInt();
+    }
+    return id;
+}
+
+
+int ControlNetDb::getSensorId(QString sensorAddress){
+    QSqlQuery getSensorIdQuery;
+    getSensorIdQuery.prepare("select id from sensors where sensor_code = :sensor_code");
+    getSensorIdQuery.bindValue(":sensor_code", sensorAddress);
+    getSensorIdQuery.executedQuery();
+    int id = 0;
+    while (getSensorIdQuery.next()){
+        id = getSensorIdQuery.value("id").toInt();
+    }
+    return id;
+}
+
 QList<Module> ControlNetDb::getModules(){
     QSqlQuery getModulesQuery;
     QList<Module> modules;

@@ -1,12 +1,15 @@
 #include "nodebus.h"
 
 NodeBus::NodeBus(){
+    timeoutTimer = new QTimer();
     network = new QNRF24L01Network(RPI_V2_GPIO_P1_15, BCM2835_SPI_CS0, BCM2835_SPI_SPEED_1MHZ);
     connect(network, SIGNAL(receivedMessageFromNode(QString,QString)), this, SLOT(onDataReceived(QString,QString)));
+    connect(timeoutTimer, SIGNAL(timeout()), this, SLOT(onTimeoutRequest()));
     network->connectToRadio();
     network->selectRecevingPipe(1, 0xF0F0F0F0F101);
     network->selectSendingPipes(0xF0F0F0F0E101);
     network->updateNodeAddressList("0");
+    network->updateNodeAddressList("1");
     network->startListening();
 }
 
@@ -15,11 +18,16 @@ void NodeBus::updateNodes(QString nodeId){
 }
 
 void NodeBus::sendRequest(QString request, QString nodeId){
+    currentNodeId = nodeId;
+    currentRequest = request;
     network->sendDataToNode(nodeId, request);
+    timeoutTimer->start(4000);
 }
 
-void NodeBus::parseDataFromTemperatureModule(QString data){
-    qDebug () << "Data: " << data;
+void NodeBus::parseDataFromTemperatureModule(QString data, QString node){
+#if DEBUG == 1
+    qDebug () << "Data to parsed from temperature module: " << data;
+#endif
     QString sensorCnt = data.split("^").value(0);
     QStringList sensors = QString(data.split("^").value(1)).split(";");
     static QList<Temperature> temperatures = QList<Temperature>();
@@ -36,11 +44,14 @@ void NodeBus::parseDataFromTemperatureModule(QString data){
         emit temperaturesReceived(temperatures);
         temperatures.clear();
     }else{
-        network->sendDataToNode("0", "AT+DS18B20,1?");
+        network->sendDataToNode(node, "AT+DS18B20,1?");
     }
 }
 
 void NodeBus::parseSensorsFromModule(QString data, QString node){
+#if DEBUG == 1
+    qDebug () << "Data to parsed from module: " << data << "|" << node;
+#endif
     QString sensorCnt = data.split("^").value(0);
     QStringList items = QString(data.split("^").value(1)).split(";");
     static QList<Sensor> sensors = QList<Sensor>();
@@ -57,15 +68,36 @@ void NodeBus::parseSensorsFromModule(QString data, QString node){
     }
 }
 
+void NodeBus::parseDataFromHumidityModule(QString data){
+   QStringList items = data.split(";");
+   float humidity = QString(items.value(0)).toFloat();
+   float temperature = QString(items.value(1)).toFloat();
+   emit temperatureReceived(temperature);
+   emit humidityReceived(humidity);
+}
+
 
 void NodeBus::onDataReceived(QString data, QString node){
+#if DEBUG == 1
+    qDebug () << "Received data from node: " << data << "|" << node;
+#endif
+    timeoutTimer->stop();
     QString responseId = data.split("=").at(0);
     if (!responseId.compare("+T")){
-        parseDataFromTemperatureModule(data.replace("+T=", ""));
+        parseDataFromTemperatureModule(data.replace("+T=", ""), node);
     }else if (!responseId.compare("+S")){
         parseSensorsFromModule(data.replace("+S=", ""), node);
+    }else if (!responseId.compare("+H*T")){
+        parseDataFromHumidityModule(data.replace("+H*T=", ""));
     }
 
+}
+
+void NodeBus::onTimeoutRequest(){
+#if DEBUG == 1
+    qDebug () << "Request repeated..." << currentRequest << "|" << currentNodeId;
+#endif
+    sendRequest(currentRequest, currentNodeId);
 }
 
 

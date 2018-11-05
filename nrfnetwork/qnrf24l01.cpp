@@ -7,7 +7,6 @@ QNRF24L01::QNRF24L01(QObject *parent) : QObject(parent)
 }
 
 QNRF24L01::QNRF24L01(uint16_t cePin, uint16_t csPin, uint32_t spiSpeed){
-    qDebug () << "Testy...";
     radio = new RF24(cePin, csPin, spiSpeed);
     timer = new QTimer();
     connect(timer, SIGNAL(timeout()),this, SLOT(listenSlot()));
@@ -16,7 +15,9 @@ QNRF24L01::QNRF24L01(uint16_t cePin, uint16_t csPin, uint32_t spiSpeed){
 }
 
 void QNRF24L01::connectToRadio(){
+#if DEBUG_COMMUNCATION == 1
     qDebug () << "Connecting to RF24...";
+#endif
     radio->begin();
 }
 
@@ -38,7 +39,9 @@ void QNRF24L01::sendData(QString data){
     radio->powerDown();
     radio->powerUp();
     bool result = radio->write(buf, 32);
+#if DEBUG_COMMUNCATION == 1
     qDebug () << "Write: " << data << "|status: " << result << "|" << QDateTime::currentDateTime();
+#endif
     radio->startListening();
     this->isWritingData = false;
     timer->start(1000);
@@ -58,6 +61,9 @@ void QNRF24L01::listenSlot(){
         if (!this->isWritingData){
             radio->read(&msg, len);
             QString stringMsg = QString(msg);
+#if DEBUG_COMMUNCATION == 1
+            qDebug () << "Received frame: " << stringMsg;
+#endif
             if (stringMsg.contains('$') == false){
                 frames->append(stringMsg);
             }else{

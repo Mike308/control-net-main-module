@@ -3,6 +3,7 @@
 
 #include "qnrf24l01.h"
 
+
 class QNRF24L01Network : public QNRF24L01
 {
     Q_OBJECT

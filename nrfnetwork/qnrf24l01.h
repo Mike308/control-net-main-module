@@ -7,6 +7,7 @@
 
 #include "3rdparty/RF24.h"
 #include "3rdparty/RF24_config.h"
+#include "qnrf24l01config.h"
 
 class QNRF24L01 : public QObject
 {

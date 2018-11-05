@@ -7,6 +7,7 @@ class Command
 
 public:
     Command();
+    Command(int id, int moduleId, QString command, int interval);
     int getId() const;
     void setId(int value);
 

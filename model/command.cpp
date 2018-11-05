@@ -5,6 +5,13 @@ Command::Command()
 
 }
 
+Command::Command(int id, int moduleId, QString command, int interval){
+    this->id = id;
+    this->moduleId = moduleId;
+    this->command = command;
+    this->interval = interval;
+}
+
 int Command::getId() const
 {
     return id;

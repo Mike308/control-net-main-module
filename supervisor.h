@@ -9,6 +9,8 @@
 #include "model/sensor.h"
 #include "node/nodebus.h"
 
+#include "scheduler.h"
+
 
 class Supervisor : public QObject
 {
@@ -20,15 +22,20 @@ public:
 private:
     QTimer *timer;
     NodeBus *nodeBus;
+    Scheduler *scheduler;
+
 
 
 
 signals:
 
 public slots:
-    void onGetTemperatures(QList<Temperature> temperatures);
+    void onTemperaturesReceived(QList<Temperature> temperatures);
     void onGetSensors(QList<Sensor>, QString nodeId);
     void onSendRequest();
+    void onCommandAlerted(QString command, QString nodeId);
+    void onTemperatureReceived(float temperature);
+    void onHumidityReceived(float humidity);
 
 
 

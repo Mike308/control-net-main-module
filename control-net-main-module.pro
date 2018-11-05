@@ -25,7 +25,8 @@ SOURCES += main.cpp \
     nrfnetwork/qnrf24l01network.cpp \
     nrfnetwork/3rdparty/utility/RPi/bcm2835.c \
     node/nodebus.cpp \
-    supervisor.cpp
+    supervisor.cpp \
+    scheduler.cpp
 
 HEADERS += \
     model/command.h \
@@ -54,7 +55,10 @@ HEADERS += \
     nrfnetwork/qnrf24l01.h \
     nrfnetwork/qnrf24l01network.h \
     node/nodebus.h \
-    supervisor.h
+    supervisor.h \
+    scheduler.h \
+    nrfnetwork/qnrf24l01config.h \
+    node/nodebus_config.h
 
 
 target.path = /home/pi/

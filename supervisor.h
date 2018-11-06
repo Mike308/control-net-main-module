@@ -8,8 +8,8 @@
 #include "model/temperature.h"
 #include "model/sensor.h"
 #include "node/nodebus.h"
-
 #include "scheduler.h"
+#include "dao/controlnetdb.h"
 
 
 class Supervisor : public QObject
@@ -20,12 +20,12 @@ public:
     void begin();
 
 private:
-    QTimer *timer;
+    QTimer *initTimer;
     NodeBus *nodeBus;
     Scheduler *scheduler;
-
-
-
+    ControlNetDb *database;
+    QList<Module> modules;
+    Module getNextModule();
 
 signals:
 

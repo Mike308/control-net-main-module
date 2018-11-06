@@ -76,6 +76,23 @@ void NodeBus::parseDataFromHumidityModule(QString data){
    emit humidityReceived(humidity);
 }
 
+void NodeBus::parseCommandsFromModule(QString data, QString node){
+    if (data.contains("^")){
+        QStringList items = data.split("^");
+        QList<Command> commands = QList<Command>();
+        for (QString item : items){
+            Command command(0, QString::number(node), item, 0);
+            commands.append(command);
+        }
+        emit commandReceived(commands, node);
+    }else{
+        QList<Command> commands = QList<Command>();
+        Command command(0, QString::number(node), data, 0);
+        commands.append(command);
+        emit commandReceived(commands, node);
+    }
+}
+
 
 void NodeBus::onDataReceived(QString data, QString node){
 #if DEBUG == 1
@@ -89,6 +106,8 @@ void NodeBus::onDataReceived(QString data, QString node){
         parseSensorsFromModule(data.replace("+S=", ""), node);
     }else if (!responseId.compare("+H*T")){
         parseDataFromHumidityModule(data.replace("+H*T=", ""));
+    }else if (!responseId.compare("+CMD")){
+        parseCommandsFromModule(data.replace("+CMD=", ""), node);
     }
 
 }

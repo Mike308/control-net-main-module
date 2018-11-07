@@ -9,6 +9,9 @@ Scheduler::Scheduler(QObject *parent) : QObject(parent)
     commandList.append(getDHT11);
     taskTimer = new QTimer();
     connect(taskTimer, SIGNAL(timeout()), this, SLOT(onTaskTimerTimeout()));
+}
+
+void Scheduler::begin(){
     taskTimer->start(60000);
 }
 
@@ -24,6 +27,4 @@ Command Scheduler::nextCommand(){
         i = 0;
     }
     return commandList.at(i);
-
-
 }

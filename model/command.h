@@ -1,7 +1,7 @@
 #ifndef COMMAND_H
 #define COMMAND_H
 #include <QString>
-
+#include <QMetaType>
 class Command
 {
 
@@ -27,5 +27,6 @@ private:
     int interval;
 
 };
+Q_DECLARE_METATYPE(Command)
 
 #endif // COMMAND_H

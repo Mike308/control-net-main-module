@@ -2,13 +2,14 @@
 #include <QDateTime>
 Supervisor::Supervisor(QObject *parent) : QObject(parent)
 {
-    timer = new QTimer();
+    initTimer = new QTimer();
     nodeBus = new NodeBus();
     scheduler = new Scheduler();
     connect(nodeBus, SIGNAL(temperaturesReceived(QList<Temperature>)), this, SLOT(onTemperaturesReceived(QList<Temperature>)));
     connect(nodeBus, SIGNAL(sensorsReceived(QList<Sensor>,QString)), this, SLOT(onGetSensors(QList<Sensor>,QString)));
     connect(nodeBus, SIGNAL(temperatureReceived(float)), this, SLOT(onTemperatureReceived(float)));
     connect(nodeBus, SIGNAL(humidityReceived(float)), this, SLOT(onHumidityReceived(float)));
+    connect(nodeBus, SIGNAL(commandReceived(QList<Command>,QString)), this, SLOT(onCommandReceived(QList<Command>)));
     connect(initTimer, SIGNAL(timeout()), this, SLOT(onSendRequest()));
     connect(scheduler, SIGNAL(commandAlerted(QString,QString)), this, SLOT(onCommandAlerted(QString,QString)));
     database = new ControlNetDb();
@@ -18,13 +19,12 @@ Supervisor::Supervisor(QObject *parent) : QObject(parent)
 
 void Supervisor::begin(){
     modules = database->getModules();
-    for (Module module : modules){
-        nodeBus->sendRequest("AT+SENS?", module.getAddress());
-    }
+    initTimer->start(30000);
 }
 
 void Supervisor::onSendRequest(){
     Module currentModule = getNextModule();
+    qDebug () << "Request for command from: " << currentModule.getAddress();
     nodeBus->sendRequest("AT+CMD?", currentModule.getAddress());
 }
 
@@ -54,12 +54,22 @@ void Supervisor::onCommandAlerted(QString command, QString nodeId){
     nodeBus->sendRequest(command, nodeId);
 }
 
-void Supervisor::getNextModule(){
+void Supervisor::onCommandReceived(QList<Command> commands){
+    qDebug () << "Commands received: ";
+    for (Command command : commands){
+        qDebug () << "Command: " << command.getCommand() << "|" << command.getModuleId();
+    }
+}
+
+Module Supervisor::getNextModule(){
     static int i = -1;
-    i++;
-    if (i > modules.length() -1){
-        i = 0;
+    ++i;
+    qDebug () << "I value: " << i;
+    if (i > (modules.length() -1)){
+        qDebug() << "STOP...";
         initTimer->stop();
+        scheduler->begin();
+        i = 0;
     }
     return modules.at(i);
 }

@@ -36,6 +36,7 @@ public slots:
     void onCommandAlerted(QString command, QString nodeId);
     void onTemperatureReceived(float temperature);
     void onHumidityReceived(float humidity);
+    void onCommandReceived(QList<Command> commands);
 
 
 

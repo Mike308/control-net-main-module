@@ -81,13 +81,13 @@ void NodeBus::parseCommandsFromModule(QString data, QString node){
         QStringList items = data.split("^");
         QList<Command> commands = QList<Command>();
         for (QString item : items){
-            Command command(0, QString::number(node), item, 0);
+            Command command(0, node.toInt(), item, 0);
             commands.append(command);
         }
         emit commandReceived(commands, node);
     }else{
         QList<Command> commands = QList<Command>();
-        Command command(0, QString::number(node), data, 0);
+        Command command(0, node.toInt(), data, 0);
         commands.append(command);
         emit commandReceived(commands, node);
     }
@@ -109,7 +109,6 @@ void NodeBus::onDataReceived(QString data, QString node){
     }else if (!responseId.compare("+CMD")){
         parseCommandsFromModule(data.replace("+CMD=", ""), node);
     }
-
 }
 
 void NodeBus::onTimeoutRequest(){

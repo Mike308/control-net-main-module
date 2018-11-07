@@ -25,6 +25,7 @@ int main(int argc, char *argv[])
     qRegisterMetaType<Sensor>();
     qRegisterMetaType<QList<Sensor>>();
     qRegisterMetaType<QList<Temperature>>();
+    qRegisterMetaType<QList<Command>>();
     Supervisor s;
     s.begin();
 

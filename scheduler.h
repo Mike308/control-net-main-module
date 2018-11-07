@@ -11,6 +11,7 @@ class Scheduler : public QObject
     Q_OBJECT
 public:
     explicit Scheduler(QObject *parent = 0);
+    void begin();
 
 
 signals:

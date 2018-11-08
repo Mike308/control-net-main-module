@@ -25,7 +25,7 @@ void Supervisor::begin(){
 void Supervisor::onSendRequest(){
     Module currentModule = getNextModule();
     qDebug () << "Request for command from: " << currentModule.getAddress();
-    nodeBus->sendRequest("AT+CMD?", currentModule.getAddress());
+    nodeBus->sendRequest("AT+SENS?", currentModule.getAddress());
 }
 
 void Supervisor::onTemperaturesReceived(QList<Temperature> temperatures){
@@ -37,7 +37,7 @@ void Supervisor::onTemperaturesReceived(QList<Temperature> temperatures){
 
 void Supervisor::onGetSensors(QList<Sensor> sensors, QString nodeId){
     for (Sensor sensor : sensors){
-        qDebug () << "Sensor: " << sensor.getSensorCode();
+        qDebug () << "Sensor: " << sensor.getSensorCode() << " sensor type: " << sensor.getSensorType();
     }
 }
 

@@ -53,27 +53,39 @@ void NodeBus::parseSensorsFromModule(QString data, QString node){
     qDebug () << "Data to parsed from module: " << data << "|" << node;
 #endif
     QString sensorCnt = data.split("^").value(0);
-    QStringList items = QString(data.split("^").value(1)).split(";");
-    static QList<Sensor> sensors = QList<Sensor>();
-    for (QString item : items){
-        Sensor sensorObj;
-        sensorObj.setSensorCode(item);
-        sensorObj.setSensorType("temp_sensor");
-        sensors.append(sensorObj);
-    }
-    if (sensors.length() > sensorCnt.toInt()){
-        emit sensorsReceived(sensors, node);
+    if (data.contains(";")){
+        QStringList items = QString(data.split("^").value(2)).split(";");
+        QString sensorType = QString(data.split("^").value(1));
+        static QList<Sensor> sensors = QList<Sensor>();
+        for (QString item : items){
+            Sensor sensorObj;
+            sensorObj.setSensorCode(item);
+            sensorObj.setSensorType(sensorType);
+            sensors.append(sensorObj);
+        }
+        if (sensors.length() > sensorCnt.toInt()){
+            emit sensorsReceived(sensors, node);
+        }else{
+            network->sendDataToNode(node, "AT+SENS,1?");
+        }
     }else{
-        network->sendDataToNode(node, "AT+SENS,1?");
+        QList<Sensor> sensors = QList<Sensor>();
+        QString sensorType = QString(data.split("^").value(1));
+        QString sensorAddress = data.replace("^", "");
+        Sensor sensor;
+        sensor.setSensorCode(sensorAddress);
+        sensor.setSensorType(sensorType);
+        sensors.append(sensor);
+        emit sensorsReceived(sensors, node);
     }
 }
 
 void NodeBus::parseDataFromHumidityModule(QString data){
-   QStringList items = data.split(";");
-   float humidity = QString(items.value(0)).toFloat();
-   float temperature = QString(items.value(1)).toFloat();
-   emit temperatureReceived(temperature);
-   emit humidityReceived(humidity);
+    QStringList items = data.split(";");
+    float humidity = QString(items.value(0)).toFloat();
+    float temperature = QString(items.value(1)).toFloat();
+    emit temperatureReceived(temperature);
+    emit humidityReceived(humidity);
 }
 
 void NodeBus::parseCommandsFromModule(QString data, QString node){

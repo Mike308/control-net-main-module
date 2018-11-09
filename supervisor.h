@@ -21,6 +21,7 @@ public:
 
 private:
     QTimer *initTimer;
+    QTimer *initSensorsTimer;
     NodeBus *nodeBus;
     Scheduler *scheduler;
     ControlNetDb *database;
@@ -37,6 +38,7 @@ public slots:
     void onTemperatureReceived(float temperature);
     void onHumidityReceived(float humidity);
     void onCommandReceived(QList<Command> commands);
+    void onSendInitSensorRequest();
 
 
 

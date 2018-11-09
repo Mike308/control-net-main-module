@@ -23,9 +23,20 @@ void Supervisor::begin(){
 }
 
 void Supervisor::onSendRequest(){
-    Module currentModule = getNextModule();
-    qDebug () << "Request for command from: " << currentModule.getAddress();
-    nodeBus->sendRequest("AT+SENS?", currentModule.getAddress());
+    static int moduleCnt = 0;
+    if (moduleCnt < modules.length()){
+        Module currentModule = getNextModule();
+        qDebug () << "Request for command from: " << currentModule.getAddress();
+        nodeBus->sendRequest("AT+CMD?", currentModule.getAddress());
+        moduleCnt++;
+    }else{
+        initTimer->stop();
+        moduleCnt = 0;
+        scheduler->begin();
+    }
+}
+
+void Supervisor::onSendInitSensorRequest(){
 }
 
 void Supervisor::onTemperaturesReceived(QList<Temperature> temperatures){
@@ -39,6 +50,7 @@ void Supervisor::onGetSensors(QList<Sensor> sensors, QString nodeId){
     for (Sensor sensor : sensors){
         qDebug () << "Sensor: " << sensor.getSensorCode() << " sensor type: " << sensor.getSensorType();
     }
+    initTimer->start(30000);
 }
 
 void Supervisor::onTemperatureReceived(float temperature){
@@ -55,10 +67,12 @@ void Supervisor::onCommandAlerted(QString command, QString nodeId){
 }
 
 void Supervisor::onCommandReceived(QList<Command> commands){
+    initTimer->stop();
     qDebug () << "Commands received: ";
     for (Command command : commands){
         qDebug () << "Command: " << command.getCommand() << "|" << command.getModuleId();
     }
+    nodeBus->sendRequest("AT+SENS?", QString::number(commands.value(0).getModuleId()));
 }
 
 Module Supervisor::getNextModule(){
@@ -67,8 +81,6 @@ Module Supervisor::getNextModule(){
     qDebug () << "I value: " << i;
     if (i > (modules.length() -1)){
         qDebug() << "STOP...";
-        initTimer->stop();
-        scheduler->begin();
         i = 0;
     }
     return modules.at(i);

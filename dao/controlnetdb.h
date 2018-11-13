@@ -31,12 +31,14 @@ public:
     ControlNetDb();
     void createDataBase();
     void insertTemperature(Temperature temperature);
+    void insertSlotSensor(QString name);
     void insertSensor(Sensor sensor);
     void insertHumidity(Humidity humidity);
     void insertCommand(Command command);
     void insertAirPressure(AirPressure airPressure);
     int getModuleId(QString moduleAddress);
     int getSensorId(QString sensorAddress);
+    int getLastInsertedSlot();
 
     QList<Module> getModules();
     QList<Command> getCommands();

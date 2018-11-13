@@ -22,6 +22,7 @@ int main(int argc, char *argv[])
 //        qDebug () << module.getName();
 //    }
     qRegisterMetaType<Temperature>();
+    qRegisterMetaType<Humidity>();
     qRegisterMetaType<Sensor>();
     qRegisterMetaType<QList<Sensor>>();
     qRegisterMetaType<QList<Temperature>>();

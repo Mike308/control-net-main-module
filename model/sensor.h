@@ -20,8 +20,12 @@ public:
     QString getSensorCode() const;
     void setSensorCode(const QString &value);
 
+    int getSensorSlotId() const;
+    void setSensorSlotId(int value);
+
 private:
     int id;
+    int sensorSlotId;
     int moduleId;
     QString sensorType;
     QString sensorCode;

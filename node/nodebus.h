@@ -10,6 +10,7 @@
 #include "model/temperature.h"
 #include "model/sensor.h"
 #include "model/command.h"
+#include "model/humidity.h"
 
 #include "dao/controlnetdb.h"
 #include "nodebus_config.h"
@@ -35,8 +36,8 @@ private:
 
 signals:
     void temperaturesReceived(QList<Temperature> temperatures);
-    void humidityReceived(float humidity);
-    void temperatureReceived(float temperature);
+    void humidityReceived(Humidity humidity);
+    void temperatureReceived(Temperature temperature);
     void sensorsReceived(QList<Sensor> sensors, QString node);
     void commandReceived(QList<Command> commands, QString node);
 

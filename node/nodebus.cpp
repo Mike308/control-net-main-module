@@ -28,6 +28,7 @@ void NodeBus::parseDataFromTemperatureModule(QString data, QString node){
 #if DEBUG == 1
     qDebug () << "Data to parsed from temperature module: " << data;
 #endif
+
     QString sensorCnt = data.split("^").value(0);
     QStringList sensors = QString(data.split("^").value(1)).split(";");
     static QList<Temperature> temperatures = QList<Temperature>();
@@ -38,9 +39,11 @@ void NodeBus::parseDataFromTemperatureModule(QString data, QString node){
         Temperature temperatureObj;
         temperatureObj.setSensorCode(sensorAdress);
         temperatureObj.setTemperature(temperature);
-        temperatures.append(temperatureObj);
+//        if (!sensorAdress.isEmpty()){
+            temperatures.append(temperatureObj);
+//        }
     }
-    if (temperatures.length() > sensorCnt.toInt()){
+    if (temperatures.length() == sensorCnt.toInt()){
         emit temperaturesReceived(temperatures);
         temperatures.clear();
     }else{
@@ -57,13 +60,16 @@ void NodeBus::parseSensorsFromModule(QString data, QString node){
         QStringList items = QString(data.split("^").value(2)).split(";");
         QString sensorType = QString(data.split("^").value(1));
         static QList<Sensor> sensors = QList<Sensor>();
+#if DEBUG == 1
+        qDebug () << "Lenght: " << items.length();
+#endif
         for (QString item : items){
             Sensor sensorObj;
             sensorObj.setSensorCode(item);
             sensorObj.setSensorType(sensorType);
             sensors.append(sensorObj);
         }
-        if (sensors.length() > sensorCnt.toInt()){
+        if (sensors.length() == sensorCnt.toInt()){
             emit sensorsReceived(sensors, node);
         }else{
             network->sendDataToNode(node, "AT+SENS,1?");
@@ -82,8 +88,14 @@ void NodeBus::parseSensorsFromModule(QString data, QString node){
 
 void NodeBus::parseDataFromHumidityModule(QString data){
     QStringList items = data.split(";");
-    float humidity = QString(items.value(0)).toFloat();
-    float temperature = QString(items.value(1)).toFloat();
+    float humidityValue = QString(items.value(0)).toFloat();
+    float temperatureValue = QString(items.value(1)).toFloat();
+    Temperature temperature;
+    temperature.setSensorCode(items.value(2));
+    temperature.setTemperature(temperatureValue);
+    Humidity humidity;
+    humidity.setHumidity(humidityValue);
+    humidity.setSensorCode(items.value(2));
     emit temperatureReceived(temperature);
     emit humidityReceived(humidity);
 }

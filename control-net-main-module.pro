@@ -58,7 +58,8 @@ HEADERS += \
     supervisor.h \
     scheduler.h \
     nrfnetwork/qnrf24l01config.h \
-    node/nodebus_config.h
+    node/nodebus_config.h \
+    supervisor_config.h
 
 
 target.path = /home/pi/

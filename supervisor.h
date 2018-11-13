@@ -7,9 +7,13 @@
 
 #include "model/temperature.h"
 #include "model/sensor.h"
+#include "model/humidity.h"
+
 #include "node/nodebus.h"
 #include "scheduler.h"
 #include "dao/controlnetdb.h"
+#include "supervisor_config.h"
+
 
 
 class Supervisor : public QObject
@@ -35,8 +39,8 @@ public slots:
     void onGetSensors(QList<Sensor>, QString nodeId);
     void onSendRequest();
     void onCommandAlerted(QString command, QString nodeId);
-    void onTemperatureReceived(float temperature);
-    void onHumidityReceived(float humidity);
+    void onTemperatureReceived(Temperature temperature);
+    void onHumidityReceived(Humidity humidity);
     void onCommandReceived(QList<Command> commands);
     void onSendInitSensorRequest();
 

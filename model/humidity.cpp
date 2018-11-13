@@ -44,3 +44,13 @@ void Humidity::setDate(const QString &value)
 {
     date = value;
 }
+
+QString Humidity::getSensorCode() const
+{
+    return sensorCode;
+}
+
+void Humidity::setSensorCode(const QString &value)
+{
+    sensorCode = value;
+}

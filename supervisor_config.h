@@ -1,0 +1,5 @@
+#ifndef SUPERVISOR_CONFIG_H
+#define SUPERVISOR_CONFIG_H
+#define DEBUG 1
+#define INSERT_INTO_DB 1
+#endif // SUPERVISOR_CONFIG_H

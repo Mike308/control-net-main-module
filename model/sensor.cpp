@@ -44,3 +44,13 @@ void Sensor::setSensorCode(const QString &value)
 {
     sensorCode = value;
 }
+
+int Sensor::getSensorSlotId() const
+{
+    return sensorSlotId;
+}
+
+void Sensor::setSensorSlotId(int value)
+{
+    sensorSlotId = value;
+}

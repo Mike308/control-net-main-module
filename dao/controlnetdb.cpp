@@ -32,7 +32,8 @@ void ControlNetDb::insertSensor(Sensor sensor){
     insertSensorQuery.prepare("insert sensors (module_id, sensor_type, sensor_code, sensor_slot) values (:module_id, :sensor_type, :sensor_code, :sensor_slot)");
     insertSensorQuery.bindValue(":module_id", sensor.getModuleId());
     insertSensorQuery.bindValue(":sensor_type", sensor.getSensorType());
-    insertSensorQuery.bindValue(":sensor_slot", 0);
+    insertSensorQuery.bindValue(":sensor_slot", sensor.getSensorSlotId());
+    insertSensorQuery.bindValue(":sensor_code", sensor.getSensorCode());
     insertSensorQuery.exec();
 }
 
@@ -40,7 +41,7 @@ void ControlNetDb::insertTemperature(Temperature temperature){
     QSqlQuery insertTemperatureQuery;
     insertTemperatureQuery.prepare("insert temperatures (sensor_id, temperature, date) values (:sensor_id, :temperature, :date)");
     insertTemperatureQuery.bindValue(":sensor_id", temperature.getSensorId());
-    insertTemperatureQuery.bindValue(":temperature", temperature.getTemperature());
+    insertTemperatureQuery.bindValue(":temperature", QString::number(temperature.getTemperature()));
     insertTemperatureQuery.bindValue(":date", temperature.getDate());
     insertTemperatureQuery.exec();
 }
@@ -49,7 +50,7 @@ void ControlNetDb::insertHumidity(Humidity humidity){
     QSqlQuery insertHumidityQuery;
     insertHumidityQuery.prepare("insert humidity_table (sensor_id, humidity, date) values (:sensor_id, :humidity, :date)");
     insertHumidityQuery.bindValue(":sensor_id", humidity.getSensorId());
-    insertHumidityQuery.bindValue(":humidity", humidity.getHumidity());
+    insertHumidityQuery.bindValue(":humidity", QString::number(humidity.getHumidity()));
     insertHumidityQuery.bindValue(":date", humidity.getDate());
     insertHumidityQuery.exec();
 }
@@ -58,16 +59,33 @@ void ControlNetDb::insertAirPressure(AirPressure airPressure){
    QSqlQuery insertAirPressureQuery;
    insertAirPressureQuery.prepare("insert into air_pressure (sensor_id, pressure, date) values (:sensor_id, :pressure, :date)");
    insertAirPressureQuery.bindValue(":sensor_id", airPressure.getSensorId());
-   insertAirPressureQuery.bindValue(":pressure", airPressure.getPressure());
+   insertAirPressureQuery.bindValue(":pressure", QString::number(airPressure.getPressure()));
    insertAirPressureQuery.bindValue(":date", airPressure.getDate());
    insertAirPressureQuery.exec();
+}
+
+void ControlNetDb::insertSlotSensor(QString name){
+    QSqlQuery insertSlotSensorQuery;
+    insertSlotSensorQuery.prepare("insert into sensor_slots (name) values (:name)");
+    insertSlotSensorQuery.bindValue(":name", name);
+    insertSlotSensorQuery.exec();
+}
+
+int ControlNetDb::getLastInsertedSlot(){
+    QSqlQuery getLastInsertedSlotQuery;
+    getLastInsertedSlotQuery.exec("select max(id) id from sensor_slots");
+    int id = 0;
+    while (getLastInsertedSlotQuery.next()){
+        id = getLastInsertedSlotQuery.value("id").toInt();
+    }
+    return id;
 }
 
 int ControlNetDb::getModuleId(QString moduleAddress){
     QSqlQuery getModuleIdQuery;
     getModuleIdQuery.prepare("select id from modules where address = :address");
     getModuleIdQuery.bindValue(":address", moduleAddress);
-    getModuleIdQuery.executedQuery();
+    getModuleIdQuery.exec();
     int id = 0;
     while (getModuleIdQuery.next()){
         id = getModuleIdQuery.value("id").toInt();
@@ -80,7 +98,7 @@ int ControlNetDb::getSensorId(QString sensorAddress){
     QSqlQuery getSensorIdQuery;
     getSensorIdQuery.prepare("select id from sensors where sensor_code = :sensor_code");
     getSensorIdQuery.bindValue(":sensor_code", sensorAddress);
-    getSensorIdQuery.executedQuery();
+    getSensorIdQuery.exec();
     int id = 0;
     while (getSensorIdQuery.next()){
         id = getSensorIdQuery.value("id").toInt();

@@ -63,7 +63,9 @@ void Supervisor::onGetSensors(QList<Sensor> sensors, QString nodeId){
 #endif
         sensor.setSensorSlotId(database->getLastInsertedSlot());
 #if INSERT_INTO_DB == 1
-        database->insertSensor(sensor);
+        if (!database->checkIfSensorExists(sensor.getSensorCode())){
+            database->insertSensor(sensor);
+        }
 #endif
 
 #if DEBUG == 1
@@ -78,16 +80,18 @@ void Supervisor::onTemperatureReceived(Temperature temperature){
 #if DEBUG == 1
     qDebug () << "Temperature from dht11: " << temperature.getTemperature();
 #endif
-    temperature.setDate(QDateTime::currentDateTime().toString());
+    temperature.setDate(QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm"));
     temperature.setSensorId(database->getSensorId(temperature.getSensorCode()));
+    database->insertTemperature(temperature);
 }
 
 void Supervisor::onHumidityReceived(Humidity humidity){
 #if DEBUG == 1
     qDebug () << "Humidity from dht11: " << humidity.getHumidity();
 #endif
-    humidity.setDate(QDateTime::currentDateTime().toString());
+    humidity.setDate(QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm"));
     humidity.setSensorId(database->getSensorId(humidity.getSensorCode()));
+    database->insertHumidity(humidity);
 }
 
 void Supervisor::onCommandAlerted(QString command, QString nodeId){
@@ -97,7 +101,7 @@ void Supervisor::onCommandAlerted(QString command, QString nodeId){
     nodeBus->sendRequest(command, nodeId);
 }
 
-void Supervisor::onCommandReceived(QList<Command> commands){
+void Supervisor::onCommandReceived(QList<Command> commands, QString nodeId){
     initTimer->stop();
 #if DEBUG == 1
     qDebug () << "Commands received: ";
@@ -106,6 +110,11 @@ void Supervisor::onCommandReceived(QList<Command> commands){
 #if DEBUG == 1
         qDebug () << "Command: " << command.getCommand() << "|" << command.getModuleId();
 #endif
+        if (!database->checkIfCommandExists(command.getCommand(), nodeId)){
+            int moduleId = database->getModuleId(nodeId);
+            command.setModuleId(moduleId);
+            database->insertCommand(command);
+        }
     }
     nodeBus->sendRequest("AT+SENS?", QString::number(commands.value(0).getModuleId()));
 }

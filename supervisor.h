@@ -41,7 +41,7 @@ public slots:
     void onCommandAlerted(QString command, QString nodeId);
     void onTemperatureReceived(Temperature temperature);
     void onHumidityReceived(Humidity humidity);
-    void onCommandReceived(QList<Command> commands);
+    void onCommandReceived(QList<Command> commands, QString nodeId);
     void onSendInitSensorRequest();
 
 

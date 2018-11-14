@@ -3,6 +3,7 @@
 
 #include <QObject>
 #include <QTimer>
+#include "dao/controlnetdb.h"
 
 #include "model/command.h"
 
@@ -11,6 +12,7 @@ class Scheduler : public QObject
     Q_OBJECT
 public:
     explicit Scheduler(QObject *parent = 0);
+    Scheduler(ControlNetDb *db);
     void begin();
 
 
@@ -22,6 +24,7 @@ private:
     bool executeNextCommand = true;
     QList<Command> commandList;
     Command nextCommand();
+    ControlNetDb *databse;
 
 
 

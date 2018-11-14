@@ -39,7 +39,8 @@ public:
     int getModuleId(QString moduleAddress);
     int getSensorId(QString sensorAddress);
     int getLastInsertedSlot();
-
+    bool checkIfSensorExists(QString sensorAddress);
+    bool checkIfCommandExists(QString command, QString nodeAddress);
     QList<Module> getModules();
     QList<Command> getCommands();
 

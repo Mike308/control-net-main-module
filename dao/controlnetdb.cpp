@@ -20,10 +20,9 @@ void ControlNetDb::createDataBase(){
 
 void ControlNetDb::insertCommand(Command command){
     QSqlQuery insertCommandQuery;
-    insertCommandQuery.prepare("insert scheduled_commands (module_id, command, command_interval) values (:module_id, :command, :command_interval)");
+    insertCommandQuery.prepare("insert commands (module_id, command) values (:module_id, :command)");
     insertCommandQuery.bindValue(":module_id", command.getModuleId());
     insertCommandQuery.bindValue(":command", command.getCommand());
-    insertCommandQuery.bindValue(":command_interval", command.getInterval());
     insertCommandQuery.exec();
 }
 
@@ -124,7 +123,7 @@ QList<Module> ControlNetDb::getModules(){
 QList<Command> ControlNetDb::getCommands(){
     QSqlQuery getCommandsQuery;
     QList<Command> commands;
-    getCommandsQuery.exec("select * from scheduled_commands");
+    getCommandsQuery.exec("select * from commands");
     while (getCommandsQuery.next()) {
         Command command;
         command.setId(getCommandsQuery.value("id").toInt());
@@ -135,6 +134,35 @@ QList<Command> ControlNetDb::getCommands(){
     }
     return commands;
 }
+
+bool ControlNetDb::checkIfSensorExists(QString sensorAddress){
+    QSqlQuery checkIfSensorExistsQuery;
+    int result = 0;
+    checkIfSensorExistsQuery.exec("select count(s.id) res from sensors s where s.sensor_code = :sensor_code");
+    checkIfSensorExistsQuery.bindValue(":sensor_code", sensorAddress);
+
+    while (checkIfSensorExistsQuery.next()){
+        result = checkIfSensorExistsQuery.value(":res").toInt();
+    }
+    return result > 0;
+}
+
+bool ControlNetDb::checkIfCommandExists(QString command, QString nodeAddress){
+    QSqlQuery checkIfCommandExistsQuery;
+    int result = 0;
+    checkIfCommandExistsQuery.exec("select count(c.id) res from commands c "
+                                   "join modules m on c.module_id = m.id "
+                                   "where m.address = :module_address and c.command = :command");
+    checkIfCommandExistsQuery.bindValue(":module_adress", nodeAddress);
+    checkIfCommandExistsQuery.bindValue(":command", command);
+    while (checkIfCommandExistsQuery.next()){
+        result = checkIfCommandExistsQuery.value(":res").toInt();
+    }
+    return result > 0;
+}
+
+
+
 
 
 
